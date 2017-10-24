@@ -38,7 +38,13 @@ async function sendIndividual(Passenger, Message) {
 
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {
-      console.log(error);
+      let failOptions = {
+        from: 'youremail@gmail.com',
+        to: 'youremail@gmail.com',
+        subject: 'Sending Email Failed using Node.js',
+        text: `Failed to send message to ${Passenger} with error message ${error} and ${info}`
+      }
+      transporter.sendMail(failOptions)
     } else {
       console.log('Email sent: ' + info.response);
     }
@@ -48,7 +54,14 @@ async function sendIndividual(Passenger, Message) {
       to: `+${Passenger.localCountryCode + Passenger.phone}`,
       from: "+twilionumber",
       body: `${Message}`,
-  }, function(err, message) {
+  }, function(err, mess) {
+      let failOptions = {
+        from: 'youremail@gmail.com',
+        to: 'youremail@gmail.com',
+        subject: 'Sending Email Failed using Node.js',
+        text: `Failed to send SMS to ${Passenger} with error message ${mess} and ${err}`
+      }
+      if (err) { transporter.sendMail(failOptions) }
       console.log(message.sid);
   });
 }
